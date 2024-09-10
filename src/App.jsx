@@ -29,7 +29,7 @@ function App() {
     <>
       <h1 className="text-3xl text-blue-400 underline text-center">Timer</h1>
       <div className="mx-auto w-3/5 mt-10">
-        <p className="text-center text-2xl mb-5">{(Math.floor(time / 60)).toString().padStart(2, '0')} : {(Math.floor(time % 60)).toString().padStart(2, '0')}</p>
+        <p className="text-center text-2xl mb-5">{(Math.floor(time / 3600)).toString().padStart(2, '0')} : {(Math.floor(time % 3600/ 60)).toString().padStart(2, '0')} : {(Math.floor(time % 60)).toString().padStart(2, '0')}</p>
         <button onClick={handleTimerToggle} className="bg-cyan-400 text-white rounded-md p-3 w-full mb-5">
           {isTimerRunnig ? 'Stop' : 'Start'}
         </button>
