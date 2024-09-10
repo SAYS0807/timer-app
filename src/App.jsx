@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 
 function App() {
-  const [time, setTime] = useState(3599);
+  const [time, setTime] = useState(0);
   const [isTimerRunnig, setisTimerRunnig] = useState(false);
 
   useEffect(() => {
