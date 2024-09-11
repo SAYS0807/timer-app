@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react"
 
 function App() {
-  const [time, setTime] = useState(0);
-  const [isTimerRunnig, setisTimerRunnig] = useState(false);
+  const [time, setTime] = useState<number>(0);
+  const [isTimerRunnig, setisTimerRunnig] = useState<boolean>(false);
 
   useEffect(() => {
-    let interval;
+    let interval: number;
     if (isTimerRunnig) {
       interval = setInterval(() => {
         //If timer is active, then add one seconds.
