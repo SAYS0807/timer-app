@@ -5,7 +5,7 @@ function App() {
   const [isTimerRunnig, setisTimerRunnig] = useState(false);
 
   useEffect(() => {
-    let interval;
+    let interval: number;
     if (isTimerRunnig) {
       interval = setInterval(() => {
         //If timer is active, then add one seconds.
@@ -17,6 +17,7 @@ function App() {
       clearInterval(interval);
     }
   }, [isTimerRunnig]);
+  
   const handleTimerToggle = () => {
     setisTimerRunnig(!isTimerRunnig);
   };
