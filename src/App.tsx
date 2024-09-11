@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
 
 function App() {
-  const [time, setTime] = useState<number>(0);
-  const [isTimerRunnig, setisTimerRunnig] = useState<boolean>(false);
+  const [time, setTime] = useState(0);
+  const [isTimerRunnig, setisTimerRunnig] = useState(false);
 
   useEffect(() => {
     let interval: number;
@@ -17,6 +17,7 @@ function App() {
       clearInterval(interval);
     }
   }, [isTimerRunnig]);
+  
   const handleTimerToggle = () => {
     setisTimerRunnig(!isTimerRunnig);
   };
