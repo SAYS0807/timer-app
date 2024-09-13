@@ -5,6 +5,7 @@ The app is designed as a basic tool for managing personal productivity.
 ## Features
 - Start, stop the timer
 - Track time spent on tasks.
+- Log the task name and the time spent.
 
 ## Technologies
 - React
