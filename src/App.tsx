@@ -9,14 +9,14 @@ function App() {
 
   const [title, setTitle] = useState('');
   const [time, setTime] = useState(0);
-  const [isTimerRunnig, setisTimerRunnig] = useState(false);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [count, setCount] = useState(0);
   const [errorMsg, setErrorMsg] = useState<string[]>([]);
 
   useEffect(() => {
     let interval: number;
-    if (isTimerRunnig) {
+    if (isTimerRunning) {
       interval = setInterval(() => {
         //If timer is active, then add one seconds.
         setTime(prevTime => prevTime + 1);
@@ -26,14 +26,14 @@ function App() {
       //clean up function
       clearInterval(interval);
     }
-  }, [isTimerRunnig]);
+  }, [isTimerRunning]);
 
   const handleTimerToggle = () => {
-    setisTimerRunnig(!isTimerRunnig);
+    setIsTimerRunning(!isTimerRunning);
   };
 
   const resetTimer = () => {
-    setisTimerRunnig(false);
+    setIsTimerRunning(false);
     setTime(0);
   }
 
@@ -45,6 +45,7 @@ function App() {
     let curError: string[] = [];
 
     if (title === '') curError.push('Please fill the task name!!');
+    if (title.length > 20) curError.push('The task name must to be under 20 characters.')
     if (time <= 0) curError.push('You need to spend at least one seconds on this task.');
 
     if (curError.length > 0) {
@@ -56,6 +57,7 @@ function App() {
   }
 
   const submitTime = () => {
+    setErrorMsg([]);
     const newTask: Task = {
       id: count,
       title: title,
@@ -64,7 +66,7 @@ function App() {
     setTasks([...tasks, newTask]);
     setTitle('');
     setCount(prevCount => prevCount + 1);
-    setisTimerRunnig(false);
+    setIsTimerRunning(false);
     setTime(0);
   }
 
@@ -82,16 +84,16 @@ function App() {
           <input type="text" onChange={(e) => handleTextChange(e.target.value)} className="w-full border-2 border-gray-600 rounded-md h-9 text-xl px-4" value={title} placeholder="Write the task name here..."></input>
           <p className="text-center text-2xl mb-5">{(Math.floor(time / 3600)).toString().padStart(2, '0')} : {(Math.floor(time % 3600 / 60)).toString().padStart(2, '0')} : {(Math.floor(time % 60)).toString().padStart(2, '0')}</p>
           <div className="w-full md:flex md:justify-between mb-11">
-            <button onClick={handleTimerToggle} className={`text-white rounded-md p-3 w-full mb-3 md:mb-0 md:w-3/12 ${isTimerRunnig ? "bg-yellow-500" : "bg-cyan-500"}`}>
-              {isTimerRunnig ? 'Stop' : 'Start'}
+            <button onClick={handleTimerToggle} className={`text-white rounded-md p-3 w-full mb-3 md:mb-0 md:w-2/5 ${isTimerRunning ? "bg-yellow-500" : "bg-cyan-500"}`}>
+              {isTimerRunning ? 'Stop' : 'Start'}
             </button>
-            <button onClick={resetTimer} className="bg-red-500 text-white rounded-md p-3 mb-3 w-full md:mb-0 md:w-3/12">
+            <button onClick={resetTimer} className="bg-red-500 text-white rounded-md p-3 mb-3 w-full md:mb-0 md:w-2/5">
               Reset
             </button>
           </div>
           <div className="w-full mx-auto">
             <p className="text-center text-xl mb-3">You've done your task?<br></br>Let's submit!!</p>
-            <button onClick={handleSubmit} className={`${time <= 0 ? "bg-gray-500" : "bg-green-400 cursor-auto"} text-white rounded-md p-3 w-full md:w-3/12`}>
+            <button onClick={handleSubmit} className={`${time <= 0 ? "bg-gray-500" : "bg-green-400 cursor-auto"} text-white rounded-md p-3 w-full md:w-full`}>
               Submit
             </button>
             <div className={`${errorMsg.length === 0 ? "hidden" : "block"} mt-3 mb-3`}>
@@ -103,11 +105,11 @@ function App() {
               </ol>
             </div>
           </div>
-          <h2>Completed Tasks</h2>
+          <h2 className="mt-5">Completed Tasks</h2>
           <ul className="mt-2">
             {tasks.map(task => (
               <li key={task.id} className="mb-3">
-                <p>{task.title}</p>
+                <p className="text-xl">{task.title}</p>
                 <div className="flex justify-between">
                   <p className="text-2xl">
                     {(Math.floor(task.spentTime / 3600)).toString().padStart(2, "0")} : {(Math.floor(task.spentTime % 3600 / 60)).toString().padStart(2, "0")} : {(Math.floor(task.spentTime % 60)).toString().padStart(2, "0")}
