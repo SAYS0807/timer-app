@@ -17,7 +17,6 @@ export default function TaskList({ tasksData, handleDelete }: TasksList) {
             <ul className="mt-2">
                 {tasksData.map((task:TaskData) => (
                     <li key={task.id} className="mb-3">
-                        <p>{task.id}</p>
                         <p className="text-xl">{task.taskName}</p>
                         <div className="flex justify-between">
                             <p className="text-2xl">
