@@ -22,15 +22,6 @@ interface TimerProps {
 export default function Timer({ time, title, controlTaskName, controlTimer, submitTaskData }: TimerProps) {
 
     const [isTimerRunning, setIsTimerRunning] = useState(false);
-    
-    // const fetchAPI = async () => {
-    //     const response = await axios.get("http://localhost:8080/api");
-    //     console.log(response.data.names);
-    // }
-
-    // useEffect(() => {
-    //     fetchAPI();
-    // }, []);
 
     useEffect(() => {
         let intervalID: number;
