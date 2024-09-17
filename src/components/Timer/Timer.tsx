@@ -1,11 +1,8 @@
-import { v4 as uuidv4, V4Options } from 'uuid';
 import { useState, useEffect } from "react";
-import axios from 'axios';
 import TitleInput from "./TitleInput";
 import TimerUI from "./TimerUI";
-import ButtonContainer from "./ButtonContainer";
-import SubmitContainer from './SubmitContainer';
-import TaskList from './TasksList';
+import ButtonContainer from './ButtonContainer';
+import SubmitContainer from './Submit/SubmitContainer';
 
 
 interface TaskData {
@@ -14,28 +11,33 @@ interface TaskData {
     timeSpent: number,
 }
 
-export default function Timer() {
+interface TimerProps {
+    time: number,
+    title: string,
+    controlTaskName: (action: string, newTitle: string) => void,
+    controlTimer: (action: string) => void,
+    submitTaskData: () => void,
+}
 
-    const [time, setTime] = useState(0);
-    const [title, setTitle] = useState('');
+export default function Timer({ time, title, controlTaskName, controlTimer, submitTaskData }: TimerProps) {
+
     const [isTimerRunning, setIsTimerRunning] = useState(false);
-    const [tasksData, setTasksData] = useState<TaskData[]>([]);
     
-    const fetchAPI = async () => {
-        const response = await axios.get("http://localhost:8080/api");
-        console.log(response.data.names);
-    }
+    // const fetchAPI = async () => {
+    //     const response = await axios.get("http://localhost:8080/api");
+    //     console.log(response.data.names);
+    // }
 
-    useEffect(() => {
-        fetchAPI();
-    }, []);
+    // useEffect(() => {
+    //     fetchAPI();
+    // }, []);
 
     useEffect(() => {
         let intervalID: number;
 
         if (isTimerRunning) {
             intervalID = setInterval(() => {
-                setTime(prevTime => prevTime + 1);
+                controlTimer('start');
             }, 1000);
         }
 
@@ -45,7 +47,7 @@ export default function Timer() {
     }, [isTimerRunning]);
 
     const handleTextChange = (input: string) => {
-        setTitle(input);
+        controlTaskName('update', input);
     };
 
     const toggleTimer = () => {
@@ -54,32 +56,13 @@ export default function Timer() {
 
     const resetTimer = () => {
         setIsTimerRunning(false);
-        setTime(0);
+        controlTimer('reset');
     };
 
-    const submitData = () => {
-        const newTask: TaskData = {
-            id: uuidv4(),
-            taskName: title,
-            timeSpent: time,
-        };
-
+    const stopTimerSubmit = () => {
         setIsTimerRunning(false);
-        setTitle('');
-        setTime(0);
-        setTasksData([...tasksData, newTask]);
-    };
-
-    const deleteData = (id: string) => {
-        const newTasksData: TaskData[] = tasksData.filter((task) => task.id !== id);
-
-        setIsTimerRunning(false);
-        setTitle('');
-        setTime(0);
-        setTasksData(newTasksData);
-    };
-
-
+        submitTaskData();
+    }
 
     return (
         <div className="mx-auto md:w-4/5 md:bg-gray-50 md:drop-shadow-md md:rounded-md md:p-8">
@@ -93,13 +76,9 @@ export default function Timer() {
                     isTimerRunning={isTimerRunning}
                 />
                 <SubmitContainer
-                    submitData={submitData}
+                    submitTaskData={stopTimerSubmit}
                     time={time}
                     title={title}
-                />
-                <TaskList
-                    tasksData={tasksData}
-                    handleDelete={(id) => deleteData(id)}
                 />
             </div>
         </div>
