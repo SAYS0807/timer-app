@@ -56,7 +56,7 @@ export default function Timer({ time, title, controlTaskName, controlTimer, subm
     }
 
     return (
-        <div className="mx-auto md:w-4/5 md:bg-gray-50 md:drop-shadow-md md:rounded-md md:p-8">
+        <div className="mx-auto md:w-4/5 md:bg-gray-50 md:drop-shadow-md md:rounded-md md:p-8 md:min-h-96">
             <div className="mx-auto w-full mt-5">
                 <h2 className="text-2xl">Task Name</h2>
                 <TitleInput onChange={handleTextChange} title={title} />

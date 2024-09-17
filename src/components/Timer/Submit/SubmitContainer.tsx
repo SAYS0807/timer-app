@@ -31,7 +31,6 @@ export default function SubmitContainer({ submitTaskData, time, title}: SubmitCo
 
     return (
         <div className="w-full mx-auto">
-            <p className="text-center text-xl mb-3">You've done your task?<br></br>Let's submit!!</p>
             <button onClick={handleClick} className={`${time <= 0 || title === '' || title.length > 20 ? "bg-gray-500" : "bg-green-400 cursor-auto"} text-white rounded-md mb-5 p-3 w-full md:w-full`}>
                 Submit
             </button>
