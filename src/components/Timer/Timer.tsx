@@ -4,13 +4,6 @@ import TimerUI from "./TimerUI";
 import ButtonContainer from './ButtonContainer';
 import SubmitContainer from './Submit/SubmitContainer';
 
-
-interface TaskData {
-    id: string,
-    taskName: string,
-    timeSpent: number,
-}
-
 interface TimerProps {
     time: number,
     title: string,
@@ -24,17 +17,7 @@ export default function Timer({ time, title, controlTaskName, controlTimer, subm
     const [isTimerRunning, setIsTimerRunning] = useState(false);
 
     useEffect(() => {
-        let intervalID: number;
-
-        if (isTimerRunning) {
-            intervalID = setInterval(() => {
-                controlTimer('start');
-            }, 1000);
-        }
-
-        return () => {
-            clearInterval(intervalID);
-        }
+        isTimerRunning ? controlTimer('start') : controlTimer('pause');
     }, [isTimerRunning]);
 
     const handleTextChange = (input: string) => {

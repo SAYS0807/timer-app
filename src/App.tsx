@@ -12,15 +12,39 @@ export interface TaskDataType {
 function App() {
   const [tasksData, setTasksData] = useState<TaskDataType[]>([]);
   const [time, setTime] = useState(0);
+  const [totalTime, setTotalTime] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [title, setTitle] = useState('');
   const [idCount, setIdCount] = useState(1);
 
-  const changeTime = (action: string) => {
+  useEffect(() => {
+    let intervalId: number;
+
+    if (isTimerRunning) {
+      const startTime = Date.now();
+      intervalId = setInterval(() => {
+        const currentTime = Date.now();
+        const elapsedTime = totalTime + currentTime - startTime;
+        setTotalTime(elapsedTime);
+        setTime(elapsedTime / 1000);
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(intervalId);
+    }
+  }, [isTimerRunning]);
+
+  const toggleTimer = (action: string) => {
     switch (action) {
-      case 'start': 
-        setTime(prevTime => prevTime + 1);
+      case 'start':
+        setIsTimerRunning(true);
+        break;
+      case 'pause':
+        setIsTimerRunning(false);
         break;
       case 'reset':
+        setIsTimerRunning(false);
         setTime(0);
         break;
     }
@@ -71,7 +95,7 @@ function App() {
             time={time}
             title={title}
             controlTaskName={(action, newTitle) => changeTitle(action, newTitle)}
-            controlTimer={(action) => changeTime(action)}
+            controlTimer={(action) => toggleTimer(action)}
             submitTaskData={() => submitTaskData()}
           />
         </div>
