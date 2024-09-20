@@ -7,36 +7,42 @@ interface Time {
 
 interface TimerSetting {
     changeTimer: boolean,
-    timeOut: boolean,
-    toggleTimer: boolean
+    toggleTimer: boolean,
+    timeOut: boolean
 }
 
-export default function PomodoroTimer({ }) {
-    const [timeLeft, setTimeLeft] = useState<Time>({ focusTime: 5, breakTime: 5 * 60 });
-    // const [breakTime, setBreakTime] = useState(5 * 60);
-    const [timerSetting, setTimerSetting] = useState<TimerSetting>({ changeTimer: false, timeOut: false, toggleTimer: false });
+export default function PomodoroTimer({ submitTask }: { submitTask: (value: number) => void }) {
+    const [initialTime, setInitialTime] = useState<Time>({ focusTime: 3, breakTime: 3 });
+    const [timeLeft, setTimeLeft] = useState<Time>({ focusTime: initialTime.focusTime, breakTime: initialTime.breakTime });
+    const [timerSetting, setTimerSetting] = useState<TimerSetting>({ changeTimer: false, toggleTimer: false, timeOut: false });
 
     useEffect(() => {
-        let intervalId:number ;
+        setTimeLeft({ focusTime: initialTime.focusTime, breakTime: initialTime.breakTime });
+    }, [initialTime]);
+
+    useEffect(() => {
+        let intervalId: number;
 
         if (timerSetting.toggleTimer) {
             if (!timerSetting.changeTimer) {
+                setTimeLeft(prevTimeLeft => ({ ...prevTimeLeft, breakTime: initialTime.breakTime }));
                 intervalId = setInterval(() => {
                     setTimeLeft(prevTimeLeft => {
                         const currentTime = prevTimeLeft.focusTime;
                         if (currentTime === 0) {
-                            setTimerSetting({ ...timerSetting, changeTimer: !timerSetting.changeTimer, timeOut: !timerSetting.timeOut });
+                            setTimerSetting({ changeTimer: !timerSetting.changeTimer, toggleTimer: false, timeOut: true });
                             return { ...prevTimeLeft, focusTime: 0 };
                         }
                         return { ...prevTimeLeft, focusTime: prevTimeLeft.focusTime - 1 };
                     })
                 }, 1000);
             } else {
+                setTimeLeft(prevTimeLeft => ({ ...prevTimeLeft, focusTime: initialTime.focusTime }));
                 intervalId = setInterval(() => {
                     setTimeLeft(prevTimeLeft => {
                         const currentTime = prevTimeLeft.breakTime;
                         if (currentTime === 0) {
-                            setTimerSetting({ ...timerSetting, changeTimer: !timerSetting.changeTimer, timeOut: !timerSetting.timeOut });
+                            setTimerSetting({...timerSetting, changeTimer: !timerSetting.changeTimer, toggleTimer: false });
                             return { ...prevTimeLeft, breakTime: 0 };
                         }
                         return { ...prevTimeLeft, breakTime: prevTimeLeft.breakTime - 1 };
@@ -50,9 +56,12 @@ export default function PomodoroTimer({ }) {
         })
     }, [timerSetting]);
 
+    useEffect(() => {
+        if(timerSetting.timeOut) submitTask(initialTime.focusTime);
+    }, [timerSetting.timeOut]);
+
     const toggleTimer = () => {
-        console.log('hello');
-        setTimerSetting({ ...timerSetting, toggleTimer: !timerSetting.toggleTimer });
+        setTimerSetting({ ...timerSetting, toggleTimer: !timerSetting.toggleTimer, timeOut: false });
     }
 
     return (
