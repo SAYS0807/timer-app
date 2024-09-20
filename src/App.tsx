@@ -45,6 +45,7 @@ function App() {
         break;
       case 'reset':
         setIsTimerRunning(false);
+        setTotalTime(0);
         setTime(0);
         break;
     }
@@ -61,18 +62,17 @@ function App() {
     }
   };
 
-  const submitTaskData = () => {
+  const submitTaskData = (timeSpent: number) => {
     const newTaskData: TaskDataType ={
       id: idCount,
-      title: title,
-      timeSpent: time,
+      title: title ? title : 'Anonymas task',
+      timeSpent: timeSpent,
     }
     
     setTasksData([...tasksData, newTaskData]);
     setTitle('');
     setTime(0);
     setIdCount(idCount + 1);
-    console.log(tasksData);
   };
 
   const deleteTaskData = (id: number) => {
@@ -96,7 +96,7 @@ function App() {
             title={title}
             controlTaskName={(action, newTitle) => changeTitle(action, newTitle)}
             controlTimer={(action) => toggleTimer(action)}
-            submitTaskData={() => submitTaskData()}
+            submitTaskData={(value) => submitTaskData(value)}
           />
         </div>
       </div>

@@ -9,7 +9,7 @@ interface TimerProps {
     title: string,
     controlTaskName: (action: string, newTitle: string) => void,
     controlTimer: (action: string) => void,
-    submitTaskData: () => void,
+    submitTaskData: (value: number) => void,
 }
 
 export default function Timer({ time, title, controlTaskName, controlTimer, submitTaskData }: TimerProps) {
@@ -35,7 +35,11 @@ export default function Timer({ time, title, controlTaskName, controlTimer, subm
 
     const stopTimerSubmit = () => {
         setIsTimerRunning(false);
-        submitTaskData();
+        submitTaskData(time);
+    }
+
+    const submitPomodoroTask = (initialTime: number) => {
+        submitTaskData(initialTime);
     }
 
     return (
@@ -43,7 +47,7 @@ export default function Timer({ time, title, controlTaskName, controlTimer, subm
             <div className="mx-auto w-full mt-5">
                 <h2 className="text-2xl">Task Name</h2>
                 <TitleInput onChange={handleTextChange} title={title} />
-                <TimerUI time={time} />
+                <TimerUI time={time} resetTimer={resetTimer} submitPomodoroTask={(value) => submitPomodoroTask(value)} />
                 <ButtonContainer
                     handleStartStopClick={toggleTimer}
                     handleResetClick={resetTimer}
