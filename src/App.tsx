@@ -45,6 +45,7 @@ function App() {
         break;
       case 'reset':
         setIsTimerRunning(false);
+        setTotalTime(0);
         setTime(0);
         break;
     }
