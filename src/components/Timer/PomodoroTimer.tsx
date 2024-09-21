@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { PomoInitial } from "./Timer";
 
 interface Time {
     focusTime: number,
@@ -11,21 +12,20 @@ interface TimerSetting {
     timeOut: boolean
 }
 
-export default function PomodoroTimer({ submitTask }: { submitTask: (value: number) => void }) {
-    const [initialTime, setInitialTime] = useState<Time>({ focusTime: 3, breakTime: 3 });
-    const [timeLeft, setTimeLeft] = useState<Time>({ focusTime: initialTime.focusTime, breakTime: initialTime.breakTime });
+export default function PomodoroTimer({ time, submitTask }: { time: PomoInitial, submitTask: (value: number) => void }) {
+    const [timeLeft, setTimeLeft] = useState<Time>({ focusTime: time.focusTime, breakTime: time.breakTime });
     const [timerSetting, setTimerSetting] = useState<TimerSetting>({ changeTimer: false, toggleTimer: false, timeOut: false });
 
     useEffect(() => {
-        setTimeLeft({ focusTime: initialTime.focusTime, breakTime: initialTime.breakTime });
-    }, [initialTime]);
+        setTimeLeft({ focusTime: time.focusTime, breakTime: time.breakTime });
+    }, [time]);
 
     useEffect(() => {
         let intervalId: number;
 
         if (timerSetting.toggleTimer) {
             if (!timerSetting.changeTimer) {
-                setTimeLeft(prevTimeLeft => ({ ...prevTimeLeft, breakTime: initialTime.breakTime }));
+                setTimeLeft(prevTimeLeft => ({ ...prevTimeLeft, breakTime: time.breakTime }));
                 intervalId = setInterval(() => {
                     setTimeLeft(prevTimeLeft => {
                         const currentTime = prevTimeLeft.focusTime;
@@ -37,12 +37,12 @@ export default function PomodoroTimer({ submitTask }: { submitTask: (value: numb
                     })
                 }, 1000);
             } else {
-                setTimeLeft(prevTimeLeft => ({ ...prevTimeLeft, focusTime: initialTime.focusTime }));
+                setTimeLeft(prevTimeLeft => ({ ...prevTimeLeft, focusTime: time.focusTime }));
                 intervalId = setInterval(() => {
                     setTimeLeft(prevTimeLeft => {
                         const currentTime = prevTimeLeft.breakTime;
                         if (currentTime === 0) {
-                            setTimerSetting({...timerSetting, changeTimer: !timerSetting.changeTimer, toggleTimer: false });
+                            setTimerSetting({ ...timerSetting, changeTimer: !timerSetting.changeTimer, toggleTimer: false });
                             return { ...prevTimeLeft, breakTime: 0 };
                         }
                         return { ...prevTimeLeft, breakTime: prevTimeLeft.breakTime - 1 };
@@ -57,7 +57,7 @@ export default function PomodoroTimer({ submitTask }: { submitTask: (value: numb
     }, [timerSetting]);
 
     useEffect(() => {
-        if(timerSetting.timeOut) submitTask(initialTime.focusTime);
+        if (timerSetting.timeOut) submitTask(time.focusTime);
     }, [timerSetting.timeOut]);
 
     const toggleTimer = () => {
@@ -69,6 +69,7 @@ export default function PomodoroTimer({ submitTask }: { submitTask: (value: numb
             <p>{`${Math.floor(timeLeft.focusTime / 60).toString().padStart(2, "0")} : ${(timeLeft.focusTime % 60).toString().padStart(2, "0")}`}</p>
             <div className="w-10/12 h-0.5 bg-white mx-auto my-3"></div>
             <p className="text-3xl">{`${Math.floor(timeLeft.breakTime / 60).toString().padStart(2, "0")} : ${(timeLeft.breakTime % 60).toString().padStart(2, "0")}`}</p>
+
         </div>
     );
 }

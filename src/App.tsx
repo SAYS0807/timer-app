@@ -16,6 +16,7 @@ function App() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [title, setTitle] = useState('');
   const [idCount, setIdCount] = useState(1);
+  const [pomodoroTImer, setPomodoroTimer] = useState(1);
 
   useEffect(() => {
     let intervalId: number;
@@ -92,7 +93,6 @@ function App() {
         </div>
         <div className="w-3/4 mx-auto md:w-1/2">
           <Timer 
-            time={time}
             title={title}
             controlTaskName={(action, newTitle) => changeTitle(action, newTitle)}
             controlTimer={(action) => toggleTimer(action)}
