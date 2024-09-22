@@ -10,7 +10,14 @@ interface TimerType {
     mode: 'normal' | 'pomo'
 }
 
-type TimerAction = { type: 'toggle' } | { type: 'reset', time: number } | { type: 'running', time: number } | { type: 'change_mode_pomo' } | { type: 'change_mode_normal' } | { type: 'pomo_stop_focus' } | { type: 'pomo_stop_break' };
+type TimerAction =
+    | { type: 'toggle' }
+    | { type: 'reset', time: number }
+    | { type: 'running', time: number }
+    | { type: 'change_mode_pomo' }
+    | { type: 'change_mode_normal' }
+    | { type: 'pomo_stop_focus' }
+    | { type: 'pomo_stop_break' };
 
 const initialTimerSetting: TimerType = {
     time: 0,

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Header from "./components/header";
 import TaskList from "./components/TaskList/TasksList";
-import Timer2 from "./components/Timer/Timer";
+import Timer from "./components/Timer/Timer";
 
 export interface TaskDataType {
   id: number,
@@ -32,7 +32,7 @@ function App() {
   return (
     <div className="md:h-screen">
       <Header />
-      <Timer2 />
+      <Timer />
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { TimerContext, TimerDispatchContext } from "./Context";
 import NormalTimer from "./NormalTimer";
 import PomodoroTimer from "./PomodoroTimer";
 
-export default function TimerUI2() {
+export default function TimerUI() {
     const timer = useContext(TimerContext);
     const dispatch = useContext(TimerDispatchContext);
     const [totalTime, setTotalTime] = useState(0);
@@ -76,10 +76,11 @@ export default function TimerUI2() {
     return (
         <>
             <p className="text-center text-3xl font-thin">Mode: {timer.mode === 'normal' ? 'Normal Timer' : 'Pomodoro Timer'}</p>
-            <div className={`relative rounded-full w-56 h-56 flex items-center content-center mx-auto my-5 bg-gradient-to-r ${timer.mode === 'normal' ? 'from-blue-500 to-cyan-400' : 'from-red-500 to-orange-400'}`}>
+            <div className={`relative rounded-full w-full h-56 flex items-center content-center mx-auto my-5 animate-bg-moving md:rounded-xl md:w-2/5 bg-gradient-to-r ${timer.isRunning ? 'animate-bg-moving' : 'animate-none'}  ${timer.isRunning && timer.mode === 'pomo' && 'via-blue-500'}  ${timer.mode === 'normal' ? 'from-blue-500  to-cyan-400' : 'from-red-500 to-orange-400'}`}>
                 {timer.mode === 'normal' ? <NormalTimer time={timer.time} /> : <PomodoroTimer time={timer.time} />}
-                <button onClick={changeTimerMode} className={`duration-150 absolute -right-4 bottom-0 text-base text-white w-20 h-20 rounded-full hover:scale-110 bg-gradient-to-r ${timer.mode === 'pomo' ? "from-blue-500 to-cyan-400" : "from-red-500 to-orange-400"}`}>Change</button>
+                <button onClick={changeTimerMode} className={`duration-150 absolute -right-1 bottom-0 text-base text-white w-20 h-20 rounded-full md:hidden hover:scale-110 bg-gradient-to-r ${timer.mode === 'pomo' ? "from-blue-500 to-cyan-400" : "from-red-500 to-orange-400"}`}>Change</button>
             </div>
+            <button onClick={changeTimerMode} className={`hidden w-2/5 h-14 mx-auto text-2xl text-white align-bottom pt-0.25 mb-8 rounded-xl font-thin bg-gradient-to-r md:block ${timer.mode === 'pomo' ? "from-blue-500 to-cyan-400" : "from-red-500 to-orange-400"}`}>Change Mode</button>
         </>
     );
 }
