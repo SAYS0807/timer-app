@@ -1,20 +1,34 @@
-import Button from "../Button/button"
+import { ButtonHTMLAttributes, ReactNode, useContext } from "react";
+import { TimerContext, TimerDispatchContext } from "./Context";
 
-interface ButtonContainerProps {
-    handleStartStopClick: React.MouseEventHandler<HTMLButtonElement>,
-    handleResetClick: React.MouseEventHandler<HTMLButtonElement>,
-    isTimerRunning: boolean,
-}
+export default function ButtonContainer() {
+    const timer = useContext(TimerContext);
+    const dispatch = useContext(TimerDispatchContext);
 
-export default function ButtonContainer({ handleStartStopClick, handleResetClick, isTimerRunning }: ButtonContainerProps) {
+    function judgeResetType() {
+        if (timer.mode === 'normal') {
+            dispatch({ type: 'reset', time: 0 });
+        } else {
+            dispatch({ type: 'reset', time: !timer.isBreakTime ? timer.pomoFocusTime : timer.pomoBreakTime });
+        }
+    }
+
     return (
-        <div className="w-full md:flex md:justify-between mb-5">
-            <Button onClick={handleStartStopClick} className={`${isTimerRunning ? "bg-yellow-500" : "bg-cyan-500"}`}>
-                {isTimerRunning ? "Stop" : "Start"}
+        <div className="w-full, mb-5, mx-auto md:flex md:justify-between md:w-3/4">
+            <Button onClick={() => dispatch({ type: 'toggle' })} className={timer.isRunning ? 'bg-orange-500' : 'bg-cyan-500'}>
+                {timer.isRunning ? 'Stop' : 'Start'}
             </Button>
-            <Button onClick={handleResetClick} className="bg-red-500">
+            <Button onClick={judgeResetType} className="bg-red-500">
                 Reset
             </Button>
         </div>
+    );
+}
+
+function Button({ children, className, onClick }: { children: ReactNode, className: string, onClick: () => void }) {
+    return (
+        <button onClick={onClick} className={`text-white rounded-md p-3 mb-3 w-full md:mb-0 md:w-2/5 ${className}`}>
+            {children}
+        </button>
     );
 }

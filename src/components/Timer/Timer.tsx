@@ -1,59 +1,20 @@
-import { useState, useEffect } from "react";
-import TitleInput from "./TitleInput";
+
 import TimerUI from "./TimerUI";
-import ButtonContainer from './ButtonContainer';
-import SubmitContainer from './Submit/SubmitContainer';
+import ButtonContainer from "./ButtonContainer";
+import TaskInput from "../TaskList/TaskInput";
+import SubmitContainer2 from "../Submit/SubmitContainer2";
 
-interface TimerProps {
-    time: number,
-    title: string,
-    controlTaskName: (action: string, newTitle: string) => void,
-    controlTimer: (action: string) => void,
-    submitTaskData: () => void,
-}
-
-export default function Timer({ time, title, controlTaskName, controlTimer, submitTaskData }: TimerProps) {
-
-    const [isTimerRunning, setIsTimerRunning] = useState(false);
-
-    useEffect(() => {
-        isTimerRunning ? controlTimer('start') : controlTimer('pause');
-    }, [isTimerRunning]);
-
-    const handleTextChange = (input: string) => {
-        controlTaskName('update', input);
-    };
-
-    const toggleTimer = () => {
-        setIsTimerRunning(!isTimerRunning);
-    };
-
-    const resetTimer = () => {
-        setIsTimerRunning(false);
-        controlTimer('reset');
-    };
-
-    const stopTimerSubmit = () => {
-        setIsTimerRunning(false);
-        submitTaskData();
-    }
+export default function Timer() {
 
     return (
-        <div className="mx-auto md:w-4/5 md:bg-gray-50 md:drop-shadow-md md:rounded-md md:p-8 md:min-h-96">
-            <div className="mx-auto w-full mt-5">
-                <h2 className="text-2xl">Task Name</h2>
-                <TitleInput onChange={handleTextChange} title={title} />
-                <TimerUI time={time} />
-                <ButtonContainer
-                    handleStartStopClick={toggleTimer}
-                    handleResetClick={resetTimer}
-                    isTimerRunning={isTimerRunning}
-                />
-                <SubmitContainer
-                    submitTaskData={stopTimerSubmit}
-                    time={time}
-                    title={title}
-                />
+        <div className="mx-auto w-full h-full md:w-full md:bg-gray-50 md:drop-shadow-md md:rounded-md md:p-4">
+            <div className="mx-auto w-full h-full md:flex md:flex-col md:justify-start md:gap-y-10">
+                <div>
+                    <TimerUI />
+                    <ButtonContainer />
+                </div>
+                <TaskInput />
+                <SubmitContainer2 />
             </div>
         </div>
     );
