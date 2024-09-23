@@ -1,17 +1,20 @@
 
 import TimerUI from "./TimerUI";
-import { TimerProvider } from "./Context";
 import ButtonContainer from "./ButtonContainer";
+import TaskInput from "../TaskList/TaskInput";
+import SubmitContainer2 from "../Submit/SubmitContainer2";
 
 export default function Timer() {
 
     return (
-        <div className="mx-auto w-5/6 md:w-4/5 md:bg-gray-50 md:drop-shadow-md md:rounded-md md:p-8 md:min-h-96">
-            <div className="mx-auto w-full mt-5">
-                <TimerProvider>
+        <div className="mx-auto w-full h-full md:w-full md:bg-gray-50 md:drop-shadow-md md:rounded-md md:p-4">
+            <div className="mx-auto w-full h-full md:flex md:flex-col md:justify-start md:gap-y-10">
+                <div>
                     <TimerUI />
                     <ButtonContainer />
-                </TimerProvider>
+                </div>
+                <TaskInput />
+                <SubmitContainer2 />
             </div>
         </div>
     );

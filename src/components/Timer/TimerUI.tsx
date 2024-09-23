@@ -17,7 +17,7 @@ export default function TimerUI() {
             if (timer.mode === 'normal') {
                 intervalId = setInterval(() => {
                     const currentTime = Date.now();
-                    const elapsedTime = totalTime + ((currentTime - startTime) / 1000);
+                    const elapsedTime = Math.floor(totalTime + ((currentTime - startTime) / 1000));
                     setTotalTime(elapsedTime);
                     dispatch({ type: 'running', time: elapsedTime });
                 }, 1000);
@@ -25,10 +25,12 @@ export default function TimerUI() {
                 intervalId = setInterval(() => {
                     const currentTime = Date.now();
                     const elapsedTime = Math.floor((currentTime - startTime) / 1000);
-                    const newRemainingTime = Math.max(0, remainingTime - elapsedTime);
+                    const newRemainingTime = Math.max(0, Math.floor(remainingTime - elapsedTime));
 
                     setRemainingTime(newRemainingTime);
-                    dispatch({ type: 'running', time: newRemainingTime });
+                    !timer.isBreakTime ?
+                        dispatch({ type: 'pomo_running', remainingTime: newRemainingTime, elapsedTime: Math.abs(newRemainingTime - timer.pomoFocusTime) })
+                        : dispatch({ type: 'pomo_running', remainingTime: newRemainingTime, elapsedTime: Math.abs(newRemainingTime - timer.pomoBreakTime) });
 
                     if (newRemainingTime === 0) {
                         clearInterval(intervalId);
@@ -60,14 +62,13 @@ export default function TimerUI() {
         setRemainingTime(timer.pomoFocusTime);
         if (timer.mode === 'normal') {
             dispatch({ type: 'reset', time: 0 });
-        } else {
-            dispatch({ type: 'pomo_stop_break' })
         }
-    }, [timer.mode])
+    }, [timer.mode]);
 
     function changeTimerMode() {
         if (timer.mode === 'normal') {
             dispatch({ type: 'change_mode_pomo' });
+            console.log(timer.pomoElapsedTime);
         } else {
             dispatch({ type: 'change_mode_normal' });
         }
@@ -76,11 +77,11 @@ export default function TimerUI() {
     return (
         <>
             <p className="text-center text-3xl font-thin">Mode: {timer.mode === 'normal' ? 'Normal Timer' : 'Pomodoro Timer'}</p>
-            <div className={`relative rounded-full w-full h-56 flex items-center content-center mx-auto my-5 animate-bg-moving md:rounded-xl md:w-2/5 bg-gradient-to-r ${timer.isRunning ? 'animate-bg-moving' : 'animate-none'}  ${timer.isRunning && timer.mode === 'pomo' && 'via-blue-500'}  ${timer.mode === 'normal' ? 'from-blue-500  to-cyan-400' : 'from-red-500 to-orange-400'}`}>
+            <div className={`relative rounded-full w-full h-56 flex items-center content-center mx-auto my-5 animate-bg-moving md:rounded-xl md:w-3/4 md:h-32 bg-gradient-to-r ${timer.isRunning ? 'animate-bg-moving' : 'animate-none'}  ${timer.isRunning && timer.mode === 'pomo' && 'via-blue-500'}  ${timer.mode === 'normal' ? 'from-blue-500  to-cyan-400' : 'from-red-500 to-orange-400'}`}>
                 {timer.mode === 'normal' ? <NormalTimer time={timer.time} /> : <PomodoroTimer time={timer.time} />}
                 <button onClick={changeTimerMode} className={`duration-150 absolute -right-1 bottom-0 text-base text-white w-20 h-20 rounded-full md:hidden hover:scale-110 bg-gradient-to-r ${timer.mode === 'pomo' ? "from-blue-500 to-cyan-400" : "from-red-500 to-orange-400"}`}>Change</button>
             </div>
-            <button onClick={changeTimerMode} className={`hidden w-2/5 h-14 mx-auto text-2xl text-white align-bottom pt-0.25 mb-8 rounded-xl font-thin bg-gradient-to-r md:block ${timer.mode === 'pomo' ? "from-blue-500 to-cyan-400" : "from-red-500 to-orange-400"}`}>Change Mode</button>
+            <button onClick={changeTimerMode} className={`hidden w-4/5 h-14 mx-auto text-2xl text-white align-bottom pt-0.25 mb-8 rounded-xl font-thin bg-gradient-to-r md:block md:w-3/4 ${timer.mode === 'pomo' ? "from-blue-500 to-cyan-400" : "from-red-500 to-orange-400"}`}>Change Mode</button>
         </>
     );
 }

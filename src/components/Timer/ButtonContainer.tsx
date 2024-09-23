@@ -14,7 +14,7 @@ export default function ButtonContainer() {
     }
 
     return (
-        <div className="w-full, mb-5, md:flex md:justify-between">
+        <div className="w-full, mb-5, mx-auto md:flex md:justify-between md:w-3/4">
             <Button onClick={() => dispatch({ type: 'toggle' })} className={timer.isRunning ? 'bg-orange-500' : 'bg-cyan-500'}>
                 {timer.isRunning ? 'Stop' : 'Start'}
             </Button>

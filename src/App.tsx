@@ -1,38 +1,26 @@
 import { useState, useEffect } from "react";
 import Header from "./components/header";
-import TaskList from "./components/TaskList/TasksList";
 import Timer from "./components/Timer/Timer";
-
-export interface TaskDataType {
-  id: number,
-  title: string,
-  timeSpent: number,
-}
+import TaskInput from "./components/TaskList/TaskInput";
+import { TasksDataProvider } from "./components/Timer/Context";
+import SubmitContainer2 from "./components/Submit/SubmitContainer2";
+import TasksList from "./components/TaskList/TasksList";
 
 function App() {
-  const [tasksData, setTasksData] = useState<TaskDataType[]>([]);
-  const [time, setTime] = useState(0);
-  const [totalTime, setTotalTime] = useState(0);
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
-  const [title, setTitle] = useState('');
-  const [idCount, setIdCount] = useState(1);
-  const [pomodoroTImer, setPomodoroTimer] = useState(1);
-
-  const changeTitle = (action: string, newTitle: string = '') => {
-    switch (action) {
-      case 'update':
-        setTitle(newTitle);
-        break;
-      case 'reset':
-        setTitle('');
-        break;
-    }
-  };
 
   return (
-    <div className="md:h-screen">
+    <div className="md:h-screen box-border">
       <Header />
-      <Timer />
+      <TasksDataProvider>
+        <div className="w-full h-4/5 mt-8 lg:flex">
+          <div className="h-full px-8 lg:w-4/5">
+            <Timer />
+          </div>
+          <div className="w-full px-8 lg:w-1/2">
+            <TasksList />
+          </div>
+        </div>
+      </TasksDataProvider>
     </div>
   );
 }
