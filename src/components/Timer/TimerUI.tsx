@@ -9,6 +9,13 @@ export default function TimerUI() {
     const [totalTime, setTotalTime] = useState(0);
     const [remainingTime, setRemainingTime] = useState(timer.pomoFocusTime);
 
+    useEffect(() => {
+        if (timer.isBreakTime) {
+            setRemainingTime(timer.pomoBreakTime);
+        } else {
+            setRemainingTime(timer.pomoFocusTime);
+        }
+    }, [timer.isBreakTime]);
 
     useEffect(() => {
         let intervalId: number;

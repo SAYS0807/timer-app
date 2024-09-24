@@ -41,8 +41,8 @@ type TasksDataAction =
 const initialTimerSetting: TimerType = {
     time: 0,
     pomoElapsedTime: 0,
-    pomoFocusTime: 5,
-    pomoBreakTime: 4,
+    pomoFocusTime: 25 * 60,
+    pomoBreakTime: 5 * 60,
     isRunning: false,
     isReset: false,
     isBreakTime: false,
@@ -126,9 +126,9 @@ function timerReducer(state: TimerType, action: TimerAction): TimerType {
         case 'pomo_stop_break':
             return { ...state, time: state.pomoBreakTime, isRunning: false, pomoElapsedTime: state.pomoBreakTime };
         case 'pomo_change_mode_focus':
-            return { ...state, time: state.pomoFocusTime, isRunning: false, isBreakTime: false };
+            return { ...state, time: state.pomoFocusTime, isRunning: false, isBreakTime: false, pomoElapsedTime: 0 };
         case 'pomo_change_mode_break':
-            return { ...state, time: state.pomoBreakTime, isRunning: false, isBreakTime: true };
+            return { ...state, time: state.pomoBreakTime, isRunning: false, isBreakTime: true, pomoElapsedTime: 0 };
         default:
             return state;
     }
